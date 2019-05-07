@@ -12,7 +12,7 @@ PASS = 'dareafat'
 browser = webdriver.Chrome()
 
 
-###### 로그인 페이지에 접근하기############
+'''########## 로그인 페이지에 접근하기 ##########'''
 
 url_login = "https://everytime.kr/login"
 browser.get(url_login)
@@ -51,60 +51,26 @@ print("로그인 버튼을 클릭합니다")
 
 
 
-###### 게시판 접근하기  ######
+
+'''########## 게시판 접근하기 ##########'''
 
 
-# url_main = "https://everytime.kr/372165/p/"
-url_test_first = 'https://everytime.kr/372165'
-# time.sleep(5)
+
+# 이미지 없는 게시글에 접근
+url_test_first = 'https://everytime.kr/372165/v/31585604'
 browser.get(url_test_first)
-
-# 요소가 보일 때까지 대기 ?
 time.sleep(1)
 
-articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
-print(len(articles))
 
-#  첫 번째 게시글로 test
+element = browser.find_elements_by_css_selector('#container > div.wrap.articles > article > a > div > figure')
+print(len(element)==0) # True
+
+# print 결과에 따라 예외처리문을 만든다
 
 
-
-link = articles[0].find_element_by_css_selector('a')
-# 가져온 links 출력해보기      
-print(link.get_attribute('href'))
 
       
-# 가져온 각 link에 접속하기      
-url_content = link.get_attribute('href')      
-browser.get(url_content)      
-time.sleep(1)
 
-#이미지 어떻게 다운로드? 클릭?
-img_element = browser.find_element_by_css_selector('#container > div.wrap.articles > article > a > div.attaches.full > figure > img')
-# img_element.click() # 클릭이 안되는 요소
-url_src = img_element.get_attribute('src')
-
-browser.get(url_src)      
-time.sleep(1)
-#print(url_src)
-browser.save_screenshot('first.png')
-
-
-#for article in articles:
-#
-#      link = article.find_element_by_css_selector('a')
-      # 가져온 links 출력해보기
-#      print(link.get_attribute('href'))
-
-      # 가져온 각 link에 접속하기
-#      url_content = link.get_attribute('href')
-#      browser.get(url_content)
-#      time.sleep(1)
-
-
-
-# 브라우저 종료
-#browser.quit()
 
 
 
