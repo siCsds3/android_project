@@ -12,7 +12,8 @@ PASS = 'dareafat'
 browser = webdriver.Chrome()
 
 
-###### 로그인 페이지에 접근하기############
+'''########## 로그인 페이지에 접근하기 ##########'''
+
 
 url_login = "https://everytime.kr/login"
 browser.get(url_login)
@@ -33,44 +34,55 @@ form.submit()
 print("로그인 버튼을 클릭합니다")
 
 
-###### 게시판 접근하기  ######
+
+
+
+
+
+
+
+
+
+
+
+'''########## 게시판 접근하기 ##########'''
 
 
 # url_main = "https://everytime.kr/372165/p/"
 url_test_first = 'https://everytime.kr/372165'
-# time.sleep(5)
 browser.get(url_test_first)
-
-# 요소가 보일 때까지 대기 ?
-time.sleep(1)
+time.sleep(1)  # 동적 요소 대기
 
 articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
 print(len(articles))
 
-#  첫 번째 게시글로 test
-
-
-
-# link = articles[0].find_element_by_css_selector('a')
-link = articles[1].find_element_by_css_selector('a') # 여러 이미지가 있는 게시글 1개
-# 가져온 links 출력해보기      
-# print(link.get_attribute('href'))
-
+for idx,article enumerate(articles):
       
-# 가져온 게시글에 접속하기      
-url_content = link.get_attribute('href')      
-browser.get(url_content)      
-time.sleep(1)
+      articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
+      
+      link = articles[idx].find_element_by_css_selector('a')
+      url_content = link.get_attribute('href')
+      browser.get(url_content) # 1개 게시글 접속
+      time.sleep(1)  # 동적 요소 대기
+
+      # 이미지 스크린 샷. 개수대로. 없을수도 있음
+      # 이미지 없는 게시글 continue 테스트 하고 오자.
+
+
+      browser.get(url_content)
+      time.sleep(1)
+
+
 
 
 #################### 이미지 여러개  ###################### [css selector 구조가 다르니 주의]
 # #container > div.wrap.articles > article > a > div.attaches.multiple > figure
-figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div.attaches.multiple > figure")
+figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
 #img = figures[0].find_element_by_css_selector('img')
 #url_src = img.get_attribute('src')
 
 for idx,figure in enumerate(figures):
-      figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div.attaches.multiple > figure")
+      figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
       img = figures[idx].find_element_by_css_selector('img')
       url_src = img.get_attribute('src')
 
