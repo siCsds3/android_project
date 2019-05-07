@@ -1,4 +1,7 @@
 
+from os import makedirs
+import os.path
+
 import time
 from selenium import webdriver
 
@@ -42,59 +45,72 @@ print("로그인 버튼을 클릭합니다")
 
 
 
-
+savepath = './p'
 
 
 '''########## 게시판 접근하기 ##########'''
+# https://everytime.kr/372165/p/176  ## 전체 게시판 1~176
 
 
-# url_main = "https://everytime.kr/372165/p/"
-url_test_first = 'https://everytime.kr/372165/p/1' # 아래도 변수 있다
-browser.get(url_test_first)
-time.sleep(1)  # 동적 요소 대기
+url_main = "https://everytime.kr/372165/p/"
+for page in range(1,176+1): # 테스트 10개  ## index: page
 
-articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
-print(len(articles))
-
-for index,article in enumerate(articles): # 게시판
+      savepath = './p' + str(page)  ## 폴더이름: p + [page]
       
-      articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
+      savedir = os.path.dirname(savepath)
+      if not os.path.exists(savedir):
+            makedirs(savedir)
       
-      link = articles[index].find_element_by_css_selector('a')
-      url_content = link.get_attribute('href')
-      
-      browser.get(url_content) # 1개 게시글 접속
+      url_page = url_main + str(page)
+      browser.get(url_page)
       time.sleep(1)  # 동적 요소 대기
 
-      # 이미지 스크린 샷. 개수대로. 없을수도 있음
-      # 이미지 없는 게시글 continue 테스트 하고 오자.
+      articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
 
+      for index,article in enumerate(articles): # 게시판 ## index: index 
+
+            articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
       
-      figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
-      if len(figures)==0:
-            browser.get(url_content)
-            time.sleep(1)
-      else:
-            for idx,figure in enumerate(figures):
-                  #
-                  figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
-                  img = figures[idx].find_element_by_css_selector('img')
-                  url_src = img.get_attribute('src')
+            link = articles[index].find_element_by_css_selector('a')
+            url_content = link.get_attribute('href')
+      
+            browser.get(url_content) # 1개 게시글 접속
+            time.sleep(1)  # 동적 요소 대기
 
-                  browser.get(url_src)      
+            # 이미지 스크린 샷. 개수대로. 없을수도 있음
+
+            figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
+
+            if len(figures)==0:
+                  browser.get(url_content)
                   time.sleep(1)
 
-                  browser.save_screenshot('second'+str(idx)+'.png')
+            else:
+                  
+                  for idx,figure in enumerate(figures): # 이미지
 
-                  browser.get(url_content) # 다시 게시글 #요소에 접근할 수 없다는 에러가 났다     
+                        savepath = './p' + str(page) + '/a' + str(index) + '_img' + str(idx)
+                        
+                        #
+                        figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
+                        img = figures[idx].find_element_by_css_selector('img')
+                        url_src = img.get_attribute('src')
+
+                        browser.get(url_src)      
+                        time.sleep(1)
+
+                        browser.save_screenshot(savepath +'.png')
+
+                        browser.get(url_content) # 다시 게시글 #요소에 접근할 수 없다는 에러가 났다     
+                        time.sleep(1)
+
+
+                  browser.get(url_content)
                   time.sleep(1)
-
-
-            browser.get(url_content)
+                        
+            browser.get(url_page)
             time.sleep(1)
 
-      browser.get(url_test_first)
-      time.sleep(1)
 
 
 
