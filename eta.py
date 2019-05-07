@@ -49,74 +49,53 @@ print("로그인 버튼을 클릭합니다")
 
 
 # url_main = "https://everytime.kr/372165/p/"
-url_test_first = 'https://everytime.kr/372165'
+url_test_first = 'https://everytime.kr/372165/p/1' # 아래도 변수 있다
 browser.get(url_test_first)
 time.sleep(1)  # 동적 요소 대기
 
 articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
 print(len(articles))
 
-for idx,article enumerate(articles):
+for index,article in enumerate(articles): # 게시판
       
       articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
       
-      link = articles[idx].find_element_by_css_selector('a')
+      link = articles[index].find_element_by_css_selector('a')
       url_content = link.get_attribute('href')
+      
       browser.get(url_content) # 1개 게시글 접속
       time.sleep(1)  # 동적 요소 대기
 
       # 이미지 스크린 샷. 개수대로. 없을수도 있음
       # 이미지 없는 게시글 continue 테스트 하고 오자.
 
-
-      browser.get(url_content)
-      time.sleep(1)
-
-
-
-
-#################### 이미지 여러개  ###################### [css selector 구조가 다르니 주의]
-# #container > div.wrap.articles > article > a > div.attaches.multiple > figure
-figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
-#img = figures[0].find_element_by_css_selector('img')
-#url_src = img.get_attribute('src')
-
-for idx,figure in enumerate(figures):
+      
       figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
-      img = figures[idx].find_element_by_css_selector('img')
-      url_src = img.get_attribute('src')
+      if len(figures)==0:
+            browser.get(url_content)
+            time.sleep(1)
+      else:
+            for idx,figure in enumerate(figures):
+                  #
+                  figures = browser.find_elements_by_css_selector("#container > div.wrap.articles > article > a > div > figure")
+                  img = figures[idx].find_element_by_css_selector('img')
+                  url_src = img.get_attribute('src')
 
-      browser.get(url_src)      
+                  browser.get(url_src)      
+                  time.sleep(1)
+
+                  browser.save_screenshot('second'+str(idx)+'.png')
+
+                  browser.get(url_content) # 다시 게시글 #요소에 접근할 수 없다는 에러가 났다     
+                  time.sleep(1)
+
+
+            browser.get(url_content)
+            time.sleep(1)
+
+      browser.get(url_test_first)
       time.sleep(1)
-#print(url_src)
-      browser.save_screenshot('second'+str(idx)+'.png')
 
-      browser.get(url_content) # 다시 게시글 #요소에 접근할 수 없다는 에러가 났다     
-      time.sleep(1)
-
-
-#################### 이미지 한개
-#img_element = browser.find_element_by_css_selector('#container > div.wrap.articles > article > a > div.attaches.full > figure > img')
-# img_element.click() # 클릭이 안되는 요소
-#url_src = img_element.get_attribute('src')
-
-##################### 이미지 스크린 샷
-#browser.get(url_src)      
-#time.sleep(1)
-#print(url_src)
-#browser.save_screenshot('second.png')
-
-
-#for article in articles:
-#
-#      link = article.find_element_by_css_selector('a')
-      # 가져온 links 출력해보기
-#      print(link.get_attribute('href'))
-
-      # 가져온 각 link에 접속하기
-#      url_content = link.get_attribute('href')
-#      browser.get(url_content)
-#      time.sleep(1)
 
 
 
