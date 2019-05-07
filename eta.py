@@ -1,12 +1,8 @@
 
 import time
 from selenium import webdriver
-import urllib.request as req
-from bs4 import BeautifulSoup
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 
 USER = "dqgsh35"
 PASS = 'dareafat'
@@ -24,7 +20,6 @@ print('로그인 페이지에 접근')
 
 #텍스트 박스에 아이디와 비밀번호 입력
 e = browser.find_element_by_css_selector("#container > form > p:nth-child(1) > input")
-# #container > form > p:nth-child(1) > input
 e.clear()
 e.send_keys(USER)
 
@@ -52,15 +47,46 @@ time.sleep(1)
 articles = browser.find_elements_by_css_selector("#container > div.wrap.articles > article")
 print(len(articles))
 
-for article in articles:
+#  첫 번째 게시글로 test
 
-      link = article.find_element_by_css_selector('a')
-      print(link.get_attribute('href'))
+
+
+link = articles[0].find_element_by_css_selector('a')
+# 가져온 links 출력해보기      
+print(link.get_attribute('href'))
+
+      
+# 가져온 각 link에 접속하기      
+url_content = link.get_attribute('href')      
+browser.get(url_content)      
+time.sleep(1)
+
+#이미지 어떻게 다운로드? 클릭?
+img_element = browser.find_element_by_css_selector('#container > div.wrap.articles > article > a > div.attaches.full > figure > img')
+# img_element.click() # 클릭이 안되는 요소
+url_src = img_element.get_attribute('src')
+
+browser.get(url_src)      
+time.sleep(1)
+#print(url_src)
+browser.save_screenshot('first.png')
+
+
+#for article in articles:
+#
+#      link = article.find_element_by_css_selector('a')
+      # 가져온 links 출력해보기
+#      print(link.get_attribute('href'))
+
+      # 가져온 각 link에 접속하기
+#      url_content = link.get_attribute('href')
+#      browser.get(url_content)
+#      time.sleep(1)
 
 
 
 # 브라우저 종료
-browser.quit()
+#browser.quit()
 
 
 
