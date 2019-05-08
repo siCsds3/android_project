@@ -2,6 +2,10 @@
 import time
 from selenium import webdriver
 
+from bs4 import BeautifulSoup
+from urllib.request import *
+from urllib.parse import *
+
 
 
 USER = "dqgsh35"
@@ -62,9 +66,10 @@ browser.get(url_content)
 time.sleep(1)
 
 #이미지 어떻게 다운로드? 클릭?
-img_element = browser.find_element_by_css_selector('#container > div.wrap.articles > article > a > div.attaches.full > figure > img')
+img_element = browser.find_element_by_css_selector('#container > div.wrap.articles > article > a > div > figure > img')
 # img_element.click() # 클릭이 안되는 요소
 url_src = img_element.get_attribute('src')
+urlretrieve(url_src, 'test.png')
 
 browser.get(url_src)      
 time.sleep(1)
